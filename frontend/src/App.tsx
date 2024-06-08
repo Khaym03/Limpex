@@ -2,6 +2,10 @@ import { useState } from 'react'
 import logo from './assets/images/logo-universal.png'
 import { Greet } from '../wailsjs/go/main/App'
 import { Card, CardBody } from '@nextui-org/react'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Layout from './components/Layout';
+import Owes from './pages/owes/Owes';
+import Sales from './pages/sales/Sales';
 
 function App() {
   const [resultText, setResultText] = useState(
@@ -15,15 +19,18 @@ function App() {
     Greet(name).then(updateResultText)
   }
 
-  return (
-    <div className="w-full h-full flex justify-center items-center bg-slate-100">
-      <Card>
-        <CardBody>
-          <p>Make beautiful websites regardless of your design experience.</p>
-        </CardBody>
-      </Card>
-    </div>
-  )
+  const router = createBrowserRouter([
+    {
+      element: <Layout />,
+      children: [
+        { path: '/', element: <Sales/> },
+        { path: '/owes', element: <Owes /> }
+        // Add more routes as needed
+      ]
+    }
+  ])
+
+  return <RouterProvider router={router} />
 }
 
 export default App
