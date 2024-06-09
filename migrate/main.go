@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
@@ -32,10 +33,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Apply migrations
-	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
-		log.Fatal(err)
-	}
+	v, d, _ := m.Version()
+	log.Printf("Version: %d, dirty: %v", v, d)
 
-	log.Println("Migraciones aplicadas exitosamente.")
+	cmd := os.Args[len(os.Args)-1]
+	if cmd == "up" {
+		if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+			log.Fatal(err)
+		}
+	}
+	if cmd == "down" {
+		if err := m.Down(); err != nil && err != migrate.ErrNoChange {
+			log.Fatal(err)
+		}
+	}
 }
