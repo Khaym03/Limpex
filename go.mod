@@ -1,4 +1,4 @@
-module myproject
+module github.com/khaym03/limpex
 
 go 1.21
 
