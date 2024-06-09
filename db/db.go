@@ -3,12 +3,21 @@ package db
 import (
 	"database/sql"
 	"log"
+	"os"
+	"path/filepath"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func NewSQLiteStorage() (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", "./shop.db")
+	workDir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	dbPath := filepath.Join(workDir, "/db/shop.db")
+
+	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		log.Fatal(err)
 	}
