@@ -24,7 +24,7 @@ func main() {
 
 	// Create a new migration instance
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://migrate/migrations",
+		"file://db/migrate/migrations",
 		"sqlite3",
 		driver,
 	)
