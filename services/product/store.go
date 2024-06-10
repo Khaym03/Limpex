@@ -10,6 +10,6 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func CreateProduct() {
+func (s *Store) CreateProduct() {
 
 }
