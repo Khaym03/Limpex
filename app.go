@@ -3,6 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+
+	"github.com/khaym03/limpex/api"
+	"github.com/khaym03/limpex/db"
 )
 
 // App struct
@@ -19,6 +23,14 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	log.Println(ctx)
+	db, err := db.NewSQLiteStorage()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	server := api.NewAPIServer(":2003", db)
+	server.Run()
 }
 
 // Greet returns a greeting for the given name
