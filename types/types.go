@@ -3,18 +3,21 @@ package types
 // import "github.com/gofiber/fiber/v2"
 
 type Product struct {
-	ProductId uint32
-	Name      string
-	Price     float64
-	Color     string
+	Id    uint32  `json:"id"`
+	Name  string  `json:"name"`
+	Price float64 `json:"price"`
+	Color string  `json:"color"`
 }
 
 type ProductPayload struct {
-	Name  string
-	Price float64
-	Color string
+	Name  string  `json:"name"`
+	Price float64 `json:"price"`
+	Color string  `json:"color"`
 }
 
 type ProductStore interface {
 	CreateProduct(ProductPayload) error
+	ListProducts() (*[]Product, error)
+	DeleteProductById(uint32) error
+	UpdateProduct(p *Product) error
 }

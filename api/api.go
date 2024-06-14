@@ -2,7 +2,6 @@ package api
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
@@ -25,20 +24,21 @@ func NewAPIServer(addr string, db *sql.DB) *APIServer {
 func (s *APIServer) Run() {
 	app := fiber.New()
 
-	// api := app.Group("api")
-	// v1 := api.Group("v1")
+	api := app.Group("api")
+	v1 := api.Group("v1")
 
 	productStore := product.NewStore(s.db)
 	productHanler := product.NewHandler(productStore)
 
-	app.Post("/product", productHanler.CreateProduct)
-	app.Get("/", productHanler.Hi)
+	v1.Post("/product", productHanler.CreateProduct)
+	v1.Get("/products", productHanler.ListProducts)
+	v1.Delete("/product/:id", productHanler.DeleteProduct)
+	v1.Put("/product", productHanler.UpdateProduct)
 
 	app.Use(cors.New(), compress.New(compress.Config{
 		Level: compress.LevelBestSpeed,
 	}))
 
-	fmt.Println("Starting Fiber server...")
 	app.Listen(s.addr)
-	fmt.Println("xxxx Fiber server...")
+
 }

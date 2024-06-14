@@ -1,7 +1,8 @@
 package product
 
 import (
-	"fmt"
+	"log"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/khaym03/limpex/types"
@@ -18,16 +19,68 @@ func NewHandler(store types.ProductStore) *Handler {
 }
 
 func (h *Handler) CreateProduct(c *fiber.Ctx) error {
-	body := c.Body()
+	var pp types.ProductPayload
+	if err := c.BodyParser(&pp); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse JSON the product",
+		})
+	}
 
-	fmt.Println(body)
+	err := h.store.CreateProduct(pp)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	return nil
+	return c.SendStatus(fiber.StatusCreated)
 }
 
-func (h *Handler) Hi(c *fiber.Ctx) error {
+func (h *Handler) ListProducts(c *fiber.Ctx) error {
+	list, err := h.store.ListProducts()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	c.Status(200).JSON("hi")
+	if list == nil {
+		return c.Status(fiber.StatusOK).JSON([]any{})
+	}
 
-	return nil
+	return c.Status(fiber.StatusOK).JSON(list)
+}
+
+func (h *Handler) DeleteProduct(c *fiber.Ctx) error {
+	p := c.Params("id")
+	// try convert it into uint32
+	uintVal, err := strconv.ParseUint(p, 10, 32)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	id := uint32(uintVal)
+
+	err = h.store.DeleteProductById(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return c.SendStatus(fiber.StatusOK)
+}
+
+func (h *Handler) UpdateProduct(c *fiber.Ctx) error {
+	var p types.Product
+	if err := c.BodyParser(&p); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse JSON the product",
+		})
+	}
+
+	if p.Id == 0 {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	err := h.store.UpdateProduct(&p)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return c.SendStatus(fiber.StatusOK)
 }

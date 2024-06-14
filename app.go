@@ -23,7 +23,7 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-	log.Println(ctx)
+
 	db, err := db.NewSQLiteStorage()
 	if err != nil {
 		log.Fatal(err)
