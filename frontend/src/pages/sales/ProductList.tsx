@@ -108,6 +108,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   }
 
   const color = [
+    'bg-blue-200',
     'bg-orange-200',
     'bg-danger-200',
     'bg-success-200',

@@ -15,6 +15,7 @@ import { RiAddFill } from 'react-icons/ri'
 import { TbAdjustments } from 'react-icons/tb'
 import { RiDeleteBin5Line } from 'react-icons/ri'
 
+
 export default function Clients() {
   const clients = [
     {

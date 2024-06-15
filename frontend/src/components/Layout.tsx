@@ -5,9 +5,15 @@ import {
   NavbarContent,
   NavbarItem,
   Link,
-  Button
+  Button,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
 } from '@nextui-org/react'
 import { NavLink, useLocation } from 'react-router-dom'
+import { TbBottleFilled } from 'react-icons/tb'
+import ProductForm from './ProductForm'
 
 const activeHandler = ({
   isActive,
@@ -47,12 +53,27 @@ export default function Layout() {
             <Link href="#">Login</Link>
           </NavbarItem> */}
           <NavbarItem>
+          {/* <Dropdown backdrop="blur">
+            <DropdownTrigger>
             <Button color="primary" href="#" variant="flat" className='font-medium'>
               Crear
             </Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Static Actions">
+              <DropdownItem
+                key="new-product"
+                startContent={<TbBottleFilled size="1.5rem" />}
+                description="Crea un nuevo producto."
+              >
+                Nuevo producto
+              </DropdownItem>    
+            </DropdownMenu>
+          </Dropdown> */}
+          <ProductForm/>
           </NavbarItem>
         </NavbarContent>
       </Navbar>
+     
 
       <main className="relative overflow-hidden grid place-items-center font-sans">
         <Outlet />
